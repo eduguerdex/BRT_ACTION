@@ -22,10 +22,13 @@ def callback(markers):
         rate= rospy.Rate(1)
         global posx,camx
         global posy,camy,k
-        global posz,camz,caja,xd
+        global posz,camz,caja,xd,N
         
         if k==0:
             for m in markers.markers:
+                    N.append(m.id)
+                    print("ID Marcador")
+                    print N
                     marker_pose = m.pose.pose
                     pos = marker_pose.position
                     ori = marker_pose.orientation
@@ -58,29 +61,31 @@ def callback(markers):
 
 if __name__=="__main__":
     rospy.init_node('BRT_action_client')
-    print("Cliente activado")
-
-    client = actionlib.SimpleActionClient('BRT_ACTION', BRTAction)
-    client.wait_for_server()
-
-    goal = BRTGoal()
     sub = rospy.Subscriber("/ar_pose_marker", AlvarMarkers, callback)
-    xr=[0,0,0]
     time.sleep(3)
-
-    if np.array_equal(xd,xr) == False:
-                goal.xd=xd
-                print("POSICION SOLICITADA:")
-                print(goal.xd)
-                client.send_goal(goal)
-                client.wait_for_result()
-                #resultados
-                MOV=client.get_result().MOVE
-                Q=client.get_result().q
-                MOV=np.round(MOV,3)
-                Q=np.round(Q,3)
-                print("POSICION FINAL:")
-                print(MOV)
-                print("ANGULOS DESPLAZADOS:")
-                print(Q)
+    print("Cliente activado")
+    tag=len(N)
+    print("TAGs Detectados:")
+    print(tag)
+    i=0
+    for i in range(tag): 
+        client = actionlib.SimpleActionClient('BRT_ACTION', BRTAction)
+        client.wait_for_server()
+        goal = BRTGoal()
+        xr=[0,0,0]
+        if np.array_equal(xd,xr) == False:
+                    goal.xd=xd
+                    print("POSICION SOLICITADA:")
+                    print(goal.xd)
+                    client.send_goal(goal)
+                    client.wait_for_result()
+                    #resultados
+                    MOV=client.get_result().MOVE
+                    Q=client.get_result().q
+                    MOV=np.round(MOV,3)
+                    Q=np.round(Q,3)
+                    print("POSICION FINAL:")
+                    print(MOV)
+                    print("ANGULOS DESPLAZADOS:")
+                    print(Q)
     
