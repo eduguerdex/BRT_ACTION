@@ -53,6 +53,7 @@ def gradiente(goal):
   m6=0
   j=0
   i=0
+  l=0
   rate = rospy.Rate(5)
   
   while j <len(q):
@@ -65,21 +66,25 @@ def gradiente(goal):
   while i<3:
         j1.data = np.round(q[0],2)
         pub1.publish(j1)
+	j4.data = np.round(q[3],2)
+	pub4.publish(j4)
         time.sleep(1)
         print("confirm M1")
         i+=1
+  while l<3:
+        j2.data = np.round(q[1],2)
+  	pub2.publish(j2)
+	j3.data = np.round(q[2],2)
+	pub3.publish(j3)
+	
+	j5.data = np.round(q[4],2)
+	pub5.publish(j5)
+        time.sleep(1)
+        print("confirm M1")
+        l+=1
 
-
-  j2.data = np.round(q[1],2)
-  j3.data = np.round(q[2],2)
-  j4.data = np.round(q[3],2)
-  j5.data = np.round(q[4],2)
   j6.data = [m6, m6]
-  jg.data = m6
-  pub2.publish(j2)
-  pub3.publish(j3)
-  pub4.publish(j4)
-  pub5.publish(j5)
+  jg.data = m6  
   pubg.publish(jg)
   pub6.publish(j6)
   
@@ -92,7 +97,50 @@ def gradiente(goal):
   result.MOVE = pos 
   
   server.set_succeeded(result)
-  
+  time.sleep(3)
+  m6=3.14
+  i=0
+  while i<3:
+        j6.data = [m6, m6]
+	jg.data = m6  
+	pubg.publish(jg)
+	pub6.publish(j6)
+        time.sleep(1)
+        print("confirm M1")
+        i+=1
+  time.sleep(5)
+  m1=[1.57,3.14   ,3.14   ,1.57]
+  m2=[1.57 ,1.57,1.57,1.57]
+  m3=[1.57 ,0   ,0   ,1.57]
+  m4=[1.57 ,0.7 ,0.7 ,1.57]
+  m5=[1.57,1.57,1.57,1.57]
+  m6=[3.14 ,3.1 ,0.5 ,0]
+
+  i=0
+  rate = rospy.Rate(5)
+  while i <len(m1):
+        
+        j1.data = m1[i]
+        j2.data = m2[i]
+        j3.data = m3[i]
+        j4.data = m4[i]
+        j5.data = m5[i]
+        j6.data = [m6[i], m6[i]]
+        jg.data = m6[i]
+
+        MOVE=[j1,j2,j3,j4,j5,jg]
+        print(MOVE)
+
+        pub1.publish(j1)
+        pub2.publish(j2)
+        pub3.publish(j3)
+        pub4.publish(j4)
+        pub5.publish(j5)
+        pubg.publish(jg)
+        pub6.publish(j6)
+
+        time.sleep(5)
+        i+=1
 
 def inicio():
     global server,q0
