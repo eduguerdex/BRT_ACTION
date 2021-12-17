@@ -66,10 +66,10 @@ def gradiente(goal):
   while i<3:
         j1.data = np.round(q[0],2)
         pub1.publish(j1)
-	j4.data = np.round(q[3],2)
+	qq3=(q[3]+0.40);
+	j4.data = np.round(qq3,2)
 	pub4.publish(j4)
         time.sleep(1)
-        print("confirm M1")
         i+=1
   while l<3:
         j2.data = np.round(q[1],2)
@@ -80,7 +80,6 @@ def gradiente(goal):
 	j5.data = np.round(q[4],2)
 	pub5.publish(j5)
         time.sleep(1)
-        print("confirm M1")
         l+=1
 
   j6.data = [m6, m6]
@@ -93,11 +92,7 @@ def gradiente(goal):
   print(MOVE)
   
   JMOVE=np.array([q[0],q[1],q[2],q[3],q[4]])
-
-  result.MOVE = pos 
-  
-  server.set_succeeded(result)
-  time.sleep(3)
+  time.sleep(1)
   m6=3.14
   i=0
   while i<3:
@@ -108,14 +103,13 @@ def gradiente(goal):
         time.sleep(1)
         print("confirm M1")
         i+=1
-  time.sleep(5)
-  m1=[1.57,3.14   ,3.14   ,1.57]
-  m2=[1.57 ,1.57,1.57,1.57]
-  m3=[1.57 ,0   ,0   ,1.57]
-  m4=[1.57 ,0.7 ,0.7 ,1.57]
-  m5=[1.57,1.57,1.57,1.57]
-  m6=[3.14 ,3.1 ,0.5 ,0]
-
+  time.sleep(1)
+  m1=[1.57-i*0.05,3.14-i*0.05,3.14-i*0.05,3.14-i*0.05,1.57]
+  m2=[1.57,1.57,1.57,1.57,1.57]
+  m3=[1.57,0   ,0   ,1.57,3.14]
+  m4=[1.57,0.7 ,0.7 ,1.57,0]
+  m5=[1.57,1.57,1.57,1.57,1.57]
+  m6=[3.14,3.14 ,0   ,0   ,0]
   i=0
   rate = rospy.Rate(5)
   while i <len(m1):
@@ -130,23 +124,44 @@ def gradiente(goal):
 
         MOVE=[j1,j2,j3,j4,j5,jg]
         print(MOVE)
-
-        pub1.publish(j1)
-        pub2.publish(j2)
+	k=0
+	while k<2:
+		pub2.publish(j2)
+		pubg.publish(jg)
+		pub6.publish(j6)
+		time.sleep(1)
+		k+=1
+	p=0
+	while p<2:
+		pub1.publish(j1)
+		time.sleep(1)
+		p+=1
         pub3.publish(j3)
         pub4.publish(j4)
         pub5.publish(j5)
-        pubg.publish(jg)
-        pub6.publish(j6)
-
-        time.sleep(5)
         i+=1
+  j1.data=1.57
+  j2.data=0.75
+  j3.data=3.14
+  j4.data=1.57
+  j5.data=1.57
+  j6.data=0
+  jg.data=0
+  pub1.publish(j1)
+  pub3.publish(j3)
+  pub4.publish(j4)
+  pub5.publish(j5)
+  pubg.publish(jg)
+  pub2.publish(j2)
+  pub6.publish(j6)
+  result.MOVE = pos 
+  server.set_succeeded(result)
 
 def inicio():
     global server,q0
     m1=1.57
     m2=0.75
-    m3=3.1415
+    m3=3.14
     m4=3.14
     m5=1.57
     m6=0

@@ -15,10 +15,10 @@ posz=[]
 posx1=[]
 posy1=[]
 posz1=[]
-camx=0.075
-camy=0.45
+camx=-0.02
+camy=0.525
 camz=0.3
-caja=0.07
+caja=0.05
 k=0
 N=[]
 NL=[]
@@ -52,7 +52,7 @@ def callback(markers):
 if __name__=="__main__":
     rospy.init_node('BRT_action_client')
     sub = rospy.Subscriber("/ar_pose_marker", AlvarMarkers, callback)
-    time.sleep(4)
+    time.sleep(3)
     print("Cliente activado")
     tag=len(NL)
     print("TAGs Detectados:")
@@ -74,8 +74,12 @@ if __name__=="__main__":
 	fy=np.round(fy,3)
 	fz=np.round(fz,3)
 
-	if fz<0.1:
-	       fz=0.115
+	if fz<0.10:
+	       fz=0.1025
+	if fz>0.122:
+	       fz=0.1025
+	#if fx<0:
+	 #      fz=0.115
 
         xd=[fy,fx,fz]
         xm=[posx,posy,posz]
@@ -88,7 +92,7 @@ if __name__=="__main__":
         goal = BRTGoal()
         
         if np.array_equal(xd,xr) == False:
-		    time.sleep(3)
+		    time.sleep(5)
                     goal.xd=xd
                     print("POSICION SOLICITADA:")
                     print(goal.xd)
