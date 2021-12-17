@@ -25,7 +25,6 @@ def fkine_BRT(q):
     q es un vector numpy de la forma [q1, q2, q3, q4, q5, q6]
     """
     # Longitudes (en metros)
-
     # Matrices DH (completar), emplear la funcion dh con los parametros DH para cada articulacion
     m=100
     l1=(7.5/m)
@@ -39,7 +38,6 @@ def fkine_BRT(q):
     T3=dh(0,q[2]-pi/2,l3,0)
     T4=dh(0,q[3],0 ,pi/2) #listo
     T5=dh(l4+l5,-q[4] ,0 ,0     )#listo
-    
     # Efector final con respecto a la base
     T = T1.dot(T2).dot(T3).dot(T4).dot(T5)
     return T
@@ -76,7 +74,7 @@ def ikine_BRT(xdes, q0):
             f=fkine_BRT(q)
             e=xdes-f[0:3,3]
             q=q+np.dot(np.linalg.pinv(J), e)
-            #Condicion de termino
+            #Condicion de final
             if (np.linalg.norm(e)<epsilon):
                 break            
             pass
@@ -85,13 +83,9 @@ def ikine_BRT(xdes, q0):
 def ik_gradient_BRT(xdes, q0):
 
     """
-
     Calcular la cinematica inversa de UR5 numericamente a partir de la configuracion articular inicial de q0. 
-
     Emplear el metodo gradiente
-
     """
-
     epsilon  = 0.001
     max_iter = 1000
     delta    = 0.00001
@@ -99,34 +93,19 @@ def ik_gradient_BRT(xdes, q0):
     q  = copy(q0)
 
     for i in range(max_iter):
-
         # Main loop
-
         #Matriz Jacobiana
-
         J=jacobian_BRT(q,delta)
-
         #Matriz Actual
-
         Td=fkine_BRT(q)
-
         #Posicion Actual
-
         xact=Td[0:3,3]
-
         # Error entre pos deseada y pos actual
-
         e=xdes-xact
-
         # Metodo de Newton
-
         q=q+alpha*np.dot(J.T,e)
-
         #Condicion de termino
-
         if(np.linalg.norm(e)<epsilon):
-
             break
-
         pass
     return q
